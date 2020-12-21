@@ -1,0 +1,23 @@
+<ng-container *ngIf="conditions">
+  <span class="label">{{ conditions.place }}</span>
+  <button class="close-button">X</button>
+
+  <div class="left-panel">
+
+    <p class="current-conditions">
+      Current conditions: {{ conditions.current }}
+    </p>
+
+    <p class="temperature">
+      Temperature: {{ conditions.temperature }}
+    </p>
+
+    <p class="min-max-temperature">
+      Max today: {{ conditions.maxTemperature }} - Min today: {{ conditions.minTemperature }}
+    </p>
+
+  </div>
+  <div class="right-panel">
+    <img [src]="conditions.image" [alt]="conditions.current">
+  </div>
+</ng-container>
