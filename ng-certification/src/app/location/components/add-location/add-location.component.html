@@ -1,0 +1,23 @@
+<form
+  class="form"
+  [formGroup]="formGroup"
+  (ngSubmit)="onFormSubmit()"
+>
+  <span class="label">Add a location</span>
+
+  <div class="zip-code">
+    <label
+      for="zip-code-input"
+      class="zip-code-label"
+    >Enter a zipcode:</label>
+
+    <input
+      formControlName="zipCode"
+      name="zip-code-input"
+      class="zip-code-input"
+      type="text"
+    >
+  </div>
+
+  <button [disabled]="disabled$ | async">Add location</button>
+</form>
