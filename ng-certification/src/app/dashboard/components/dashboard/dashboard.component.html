@@ -1,1 +1,12 @@
 <app-add-location></app-add-location>
+
+<div *ngIf="isLoading$ | async; else showWeather">
+  Loading...
+</div>
+<ng-template #showWeather>
+  <app-weather-conditions
+    *ngFor="let condition of (conditions$ | async); trackBy trackByCondition"
+    [condition]="condition"
+    class="weather-condition">
+  </app-weather-conditions>
+</ng-template>
