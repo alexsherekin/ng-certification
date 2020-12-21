@@ -8,11 +8,14 @@ import {WeatherConditions} from '../../structures/weather-conditions';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WeatherConditionsComponent implements OnInit {
-  @Input() conditions: undefined | WeatherConditions;
+  @Input() condition: undefined | WeatherConditions;
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  getImage(condition: WeatherConditions): string {
+    return '';
+  }
 }

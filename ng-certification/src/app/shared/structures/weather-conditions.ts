@@ -4,5 +4,4 @@ export interface WeatherConditions {
   temperature: number;
   maxTemperature: number;
   minTemperature: number;
-  image: string;
 }
