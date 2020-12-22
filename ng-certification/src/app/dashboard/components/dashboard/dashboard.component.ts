@@ -28,7 +28,7 @@ export class DashboardComponent implements OnInit {
 
         return of(...locations).pipe(
           concatMap((location: LocationData) => {
-            return this.weatherService.getByZip(location.zip);
+            return this.weatherService.getByZip(location.zip, true);
           }),
           toArray(),
           map(conditions => conditions.filter(Boolean))
