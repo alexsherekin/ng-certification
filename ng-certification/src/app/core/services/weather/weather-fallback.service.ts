@@ -1,14 +1,15 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, of} from 'rxjs';
+import {Observable, of, race, timer} from 'rxjs';
 import {WeatherConditions} from '../../../shared/structures/weather-conditions';
-import {catchError, map} from 'rxjs/operators';
+import {catchError, map, take} from 'rxjs/operators';
 import {WeatherServiceInterface} from './weather-service.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WeatherFallbackService implements WeatherServiceInterface {
+  private readonly HTTP_REQUEST_TIMEOUT = 3000;
   private readonly URL = 'https://lp-store.herokuapp.com/weather?zipcode=95742';
 
   constructor(
@@ -17,13 +18,16 @@ export class WeatherFallbackService implements WeatherServiceInterface {
   }
 
   getByZip(zipCode: string): Observable<undefined | WeatherConditions> {
-    return this.httpClient.get<any>(this.URL, {responseType: 'json'})
-      .pipe(
-        map(response => this.apiResponseToWeatherConditions(response, zipCode)),
-        catchError(error => {
-          return of(undefined);
-        })
-      );
+    return race(
+      this.httpClient.get<any>(this.URL, {responseType: 'json'})
+        .pipe(
+          map(response => this.apiResponseToWeatherConditions(response, zipCode)),
+          catchError(error => {
+            return of(undefined);
+          })
+        ),
+      timer(this.HTTP_REQUEST_TIMEOUT).pipe(take(1)),
+    );
   }
 
   private apiResponseToWeatherConditions = (response: any, zipCode: string): WeatherConditions => {
