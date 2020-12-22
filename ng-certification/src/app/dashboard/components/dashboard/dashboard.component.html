@@ -1,11 +1,11 @@
 <app-add-location></app-add-location>
 
 <div [class.is-loading]="isLoading$ | async">
-  <span class="loading">Loading...</span>
+  <div class="loading">Loading...</div>
   <app-weather-conditions
     *ngFor="let condition of (conditions$ | async); trackBy trackByCondition"
     [condition]="condition"
-    (close)="removeLocation(condition.zipCode)"
+    (remove)="removeLocation(condition.zipCode)"
     class="weather-condition">
   </app-weather-conditions>
 </div>

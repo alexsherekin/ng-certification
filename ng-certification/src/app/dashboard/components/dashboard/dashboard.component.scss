@@ -1,12 +1,13 @@
 :host {
   .loading {
     display: none;
+    text-align: center;
   }
 
   .is-loading {
     display: contents;
     .loading {
-      display: inline;
+      display: block;
     }
 
     .weather-condition {

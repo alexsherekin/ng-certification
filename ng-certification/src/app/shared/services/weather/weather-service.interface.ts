@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {WeatherConditions} from '../../../shared/structures/weather-conditions';
-import {CoreModule} from "../../core.module";
-import {WeatherFallbackService} from "./weather-fallback.service";
+import {WeatherConditions} from '../../structures/weather-conditions';
+import {CoreModule} from '../../../core/core.module';
+import {WeatherFallbackService} from './weather-fallback.service';
 
 @Injectable({
   providedIn: CoreModule,

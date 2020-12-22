@@ -3,7 +3,6 @@
   <button (click)="onCloseButtonClicked()" class="close-button">X</button>
 
   <div class="left-panel">
-
     <p class="current-condition">
       Current condition: {{ condition.current }}
     </p>
@@ -15,9 +14,8 @@
     <p class="min-max-temperature">
       Max today: {{ condition.maxTemperature }} - Min today: {{ condition.minTemperature }}
     </p>
-
   </div>
   <div class="right-panel">
-    <img [src]="getImage(condition)" [alt]="condition.current">
+    <img class="image" [src]="getImage(condition)" [alt]="condition.current">
   </div>
 </ng-container>

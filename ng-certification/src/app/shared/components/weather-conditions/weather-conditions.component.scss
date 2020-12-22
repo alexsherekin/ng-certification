@@ -24,13 +24,24 @@
     right: 0.5rem;
     top: 0.5rem;
     height: 1.5rem;
+    cursor: pointer;
   }
 
   .left-panel {
-    flex: auto;
+    flex: 0 0 auto;
+    max-width: 50%;
+    min-width: 30%;
   }
 
   .right-panel {
     flex: 1;
+    align-self: center;
+    text-align: right;
+
+    .image {
+      min-width: 100px;
+      max-width: 150px;
+      width: 100%;
+    }
   }
 }

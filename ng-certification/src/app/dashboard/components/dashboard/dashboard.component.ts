@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {BehaviorSubject, Observable, of} from 'rxjs';
 import {concatMap, finalize, map, startWith, switchMap, tap, toArray} from 'rxjs/operators';
-import {WeatherServiceInterface} from '../../../core/services/weather/weather-service.interface';
+import {WeatherServiceInterface} from '../../../shared/services/weather/weather-service.interface';
 import {LocationServiceInterface} from '../../../location/services/location/location-service.interface';
 import {LocationData} from '../../../location/structures/location-data';
 import {WeatherConditions} from '../../../shared/structures/weather-conditions';

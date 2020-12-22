@@ -1,5 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {WeatherConditions} from '../../structures/weather-conditions';
+import weatherConditionConverter from './weather-condition-to-image';
 
 @Component({
   selector: 'app-weather-conditions',
@@ -9,7 +10,7 @@ import {WeatherConditions} from '../../structures/weather-conditions';
 })
 export class WeatherConditionsComponent implements OnInit {
   @Input() condition: undefined | WeatherConditions;
-  @Output() close = new EventEmitter<void>();
+  @Output() remove = new EventEmitter<void>();
 
   constructor() { }
 
@@ -17,10 +18,10 @@ export class WeatherConditionsComponent implements OnInit {
   }
 
   getImage(condition: WeatherConditions): string {
-    return '';
+    return weatherConditionConverter[condition.current];
   }
 
   onCloseButtonClicked(): void {
-    this.close.emit();
+    this.remove.emit();
   }
 }
