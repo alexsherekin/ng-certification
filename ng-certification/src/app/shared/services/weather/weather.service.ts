@@ -14,7 +14,6 @@ export const WEATHER_APP_ID_INJECTION_TOKEN = new InjectionToken<string>('WEATHE
 export class WeatherService implements WeatherServiceInterface {
   private readonly HTTP_REQUEST_TIMEOUT = 3000;
   private readonly URL = 'https://openweathermap.org/api';
-  private readonly cache = new Map<string, WeatherConditions>();
 
   constructor(
     private readonly httpClient: HttpClient,
@@ -23,24 +22,18 @@ export class WeatherService implements WeatherServiceInterface {
     this.weatherAppId = this.weatherAppId ?? '5a4b2d457ecbef9eb2a71e480b947604';
   }
 
-  getByZip(zipCode: string, useCache?: boolean): Observable<undefined | WeatherConditions> {
-    if (useCache && this.cache.has(zipCode)) {
-      return of(this.cache.get(zipCode));
-    }
-
+  getByZip(zipCode: string): Observable<undefined | WeatherConditions> {
     return race(
       this.httpClient.get<any>(this.getByZipUrl(zipCode), {responseType: 'json'})
         .pipe(
-          map(response => {
-            const result = responseConverter(response, zipCode);
-            this.cache.set(zipCode, result);
-            return result;
-          }),
-          catchError(error => {
-            return of(undefined);
-          })
+          map(response => responseConverter(response, zipCode)),
         ),
-      timer(this.HTTP_REQUEST_TIMEOUT).pipe(take(1)),
+      timer(this.HTTP_REQUEST_TIMEOUT).pipe(
+        take(1),
+        map(() => {
+          throw new Error('Timeout');
+        })
+      ),
     );
   }
 

@@ -1,10 +1,10 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {BehaviorSubject, Observable, of} from 'rxjs';
 import {concatMap, finalize, map, startWith, switchMap, tap, toArray} from 'rxjs/operators';
-import {WeatherServiceInterface} from '../../../shared/services/weather/weather-service.interface';
 import {LocationServiceInterface} from '../../../location/services/location/location-service.interface';
 import {LocationData} from '../../../location/structures/location-data';
 import {WeatherConditions} from '../../../shared/structures/weather-conditions';
+import {WeatherCachingServiceInterface} from '../../../shared/services/weather-caching/weather-caching-service.interface';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,7 +28,7 @@ export class DashboardComponent implements OnInit {
 
         return of(...locations).pipe(
           concatMap((location: LocationData) => {
-            return this.weatherService.getByZip(location.zip, true);
+            return this.weatherService.getByZip(location.zip);
           }),
           toArray(),
           map(conditions => conditions.filter(Boolean))
@@ -40,7 +40,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private readonly locationService: LocationServiceInterface,
-    private readonly weatherService: WeatherServiceInterface,
+    private readonly weatherService: WeatherCachingServiceInterface,
     private cd: ChangeDetectorRef,
   ) {
   }

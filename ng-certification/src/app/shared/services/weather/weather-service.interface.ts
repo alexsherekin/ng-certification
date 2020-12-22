@@ -9,5 +9,5 @@ import {WeatherFallbackService} from './weather-fallback.service';
   useClass: WeatherFallbackService,
 })
 export abstract class WeatherServiceInterface {
-  abstract getByZip(zipCode: string, useCache?: boolean): Observable<WeatherConditions>;
+  abstract getByZip(zipCode: string): Observable<WeatherConditions>;
 }
