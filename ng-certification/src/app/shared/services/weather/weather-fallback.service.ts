@@ -11,7 +11,8 @@ import {responseConverter} from './response-converter';
 })
 export class WeatherFallbackService implements WeatherServiceInterface {
   private readonly HTTP_REQUEST_TIMEOUT = 3000;
-  private readonly URL = 'https://lp-store.herokuapp.com/weather?zipcode=95742';
+  private readonly FALLBACK_ZIP_CODES = ['95742', '10001', '33101'];
+  private readonly BUILD_URL = (zipCode: string) => `https://lp-store.herokuapp.com/weather?zipcode=${zipCode}`;
 
   constructor(
     private readonly httpClient: HttpClient,
@@ -19,8 +20,9 @@ export class WeatherFallbackService implements WeatherServiceInterface {
   }
 
   getByZip(zipCode: string): Observable<undefined | WeatherConditions> {
+    const randomZipCodeIndex = Math.floor(Math.random() * 100) % this.FALLBACK_ZIP_CODES.length;
     return race(
-      this.httpClient.get<any>(this.URL, {responseType: 'json'})
+      this.httpClient.get<any>(this.BUILD_URL(this.FALLBACK_ZIP_CODES[randomZipCodeIndex]), {responseType: 'json'})
         .pipe(
           map(response => responseConverter(response, zipCode)),
           catchError(error => {
