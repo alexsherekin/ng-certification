@@ -4,7 +4,7 @@ import {Observable, of, race, timer} from 'rxjs';
 import {WeatherConditions} from '../../structures/weather-conditions';
 import {catchError, map, take} from 'rxjs/operators';
 import {WeatherServiceInterface} from './weather-service.interface';
-import {responseConverter} from './response-converter';
+import {getByZipResponseConverter} from './response-converter';
 
 @Injectable({
   providedIn: 'root'
@@ -24,11 +24,25 @@ export class WeatherFallbackService implements WeatherServiceInterface {
     return race(
       this.httpClient.get<any>(this.BUILD_URL(this.FALLBACK_ZIP_CODES[randomZipCodeIndex]), {responseType: 'json'})
         .pipe(
-          map(response => responseConverter(response, zipCode)),
+          map(response => getByZipResponseConverter(response, zipCode)),
           catchError(error => {
             return of(undefined);
           })
         ),
+      timer(this.HTTP_REQUEST_TIMEOUT).pipe(
+        take(1),
+        map(() => {
+          throw new Error('Timeout');
+        })
+      ),
+    );
+  }
+
+  get5DaysByZip(zipCode: string): Observable<undefined | WeatherConditions[]> {
+    return race(
+      this.getByZip(zipCode).pipe(
+        map(condition => [condition, condition, condition, condition, condition])
+      ),
       timer(this.HTTP_REQUEST_TIMEOUT).pipe(
         take(1),
         map(() => {

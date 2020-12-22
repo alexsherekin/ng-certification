@@ -6,10 +6,11 @@ export enum WeatherCondition {
 }
 
 export interface WeatherConditions {
+  date: Date;
   zipCode: string;
   place: string;
   current: WeatherCondition;
-  temperature: number;
+  temperature?: number;
   maxTemperature: number;
   minTemperature: number;
 }

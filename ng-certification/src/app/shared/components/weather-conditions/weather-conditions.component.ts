@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {WeatherConditions} from '../../structures/weather-conditions';
-import weatherConditionConverter from './weather-condition-to-image';
+import weatherConditionConverter from '../../utils/weather-condition-to-image';
 
 @Component({
   selector: 'app-weather-conditions',

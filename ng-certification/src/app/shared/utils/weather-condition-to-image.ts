@@ -1,4 +1,4 @@
-import {WeatherCondition} from '../../structures/weather-conditions';
+import {WeatherCondition} from '../structures/weather-conditions';
 
 export default {
   [WeatherCondition.clouds]: 'assets/clouds.png',

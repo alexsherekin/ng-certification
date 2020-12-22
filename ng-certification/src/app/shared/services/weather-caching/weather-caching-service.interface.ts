@@ -11,4 +11,5 @@ import {WeatherCachingService} from './weather-caching.service';
 })
 export abstract class WeatherCachingServiceInterface implements WeatherServiceInterface {
   abstract getByZip(zipCode: string): Observable<WeatherConditions>;
+  abstract get5DaysByZip(zipCode: string): Observable<WeatherConditions[]>;
 }

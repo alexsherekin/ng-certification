@@ -34,6 +34,10 @@ export class WeatherCachingService implements WeatherServiceInterface, OnDestroy
     );
   }
 
+  get5DaysByZip(zipCode: string): Observable<WeatherConditions[]> {
+    return this.weatherService.get5DaysByZip(zipCode);
+  }
+
   private clearCache(): void {
     this.cache.clear();
   }

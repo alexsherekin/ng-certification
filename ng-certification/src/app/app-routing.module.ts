@@ -6,6 +6,10 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
+  },
+  {
+    path: 'forecast/:zipCode',
+    loadChildren: () => import('./forecast/forecast.module').then(m => m.ForecastModule),
   }
 ];
 

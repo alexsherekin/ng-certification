@@ -1,0 +1,23 @@
+<ng-container *ngIf="isLoading$ | async; else showData">
+  <span class="loading">Loading...</span>
+</ng-container>
+
+<ng-template #showData>
+  <ng-container *ngIf="data$ | async as data">
+    <ng-container *ngIf="data.length > 0">
+      <span class="label">{{ data[0].place }} ({{ data[0].zipCode }})</span>
+
+      <div
+        *ngFor="let condition of data; trackBy trackByCondition"
+        class="row"
+      >
+        {{condition | weatherConditionCompact}}
+        <img
+          class="image"
+          [src]="getImage(condition)"
+          [alt]="condition.current"
+        >
+      </div>
+    </ng-container>
+  </ng-container>
+</ng-template>
