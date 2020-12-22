@@ -1,13 +1,13 @@
 import {Injectable} from "@angular/core";
-import {BehaviorSubject, Observable, of} from 'rxjs';
+import {EMPTY, Observable, of} from 'rxjs';
 import {map, switchMap} from 'rxjs/operators';
 import {LocationStorageService} from '../../../shared/services/location-storage/location-storage.service';
 import {LocationData} from '../../structures/location-data';
+import {LocationServiceInterface} from "./location-service.interface";
 
 @Injectable()
-export class LocationService {
-  private readonly locationsSubject = new BehaviorSubject<string[]>([]);
-  readonly locations$ = this.locationsSubject.asObservable();
+export class LocationService implements LocationServiceInterface {
+  readonly locations$ = this.storage.value$;
 
   constructor(private readonly storage: LocationStorageService) { }
 
@@ -28,6 +28,24 @@ export class LocationService {
         }
 
         return this.storage.add([...locations, newLocation]);
+      }),
+      map(() => {}),
+    );
+  }
+
+  remove(locationToRemove: LocationData): Observable<void> {
+    return this.storage.get().pipe(
+      switchMap((locations: undefined | LocationData[]) => {
+        if (!locations || !Array.isArray(locations)) {
+          return EMPTY;
+        }
+
+        const updatedLocations = locations.filter(location => !this.areEqual(location, locationToRemove));
+        // Location does not exist
+        if (updatedLocations.length === locations.length) {
+          return EMPTY;
+        }
+        return this.storage.update(updatedLocations);
       }),
       map(() => {}),
     );

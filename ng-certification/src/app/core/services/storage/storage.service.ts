@@ -1,8 +1,12 @@
-import {EMPTY, Observable, of} from 'rxjs';
+import {BehaviorSubject, EMPTY, merge, Observable, of} from 'rxjs';
 import {StorageServiceInterface} from './storage-service.interface';
 
 export class StorageService<T> implements StorageServiceInterface<T> {
-  constructor(private readonly key: string) { }
+  private readonly subject = new BehaviorSubject<undefined | T>(undefined);
+  readonly value$ = merge(this.subject, this.get());
+
+  constructor(private readonly key: string) {
+  }
 
   get(): Observable<undefined | T> {
     try {
@@ -16,6 +20,7 @@ export class StorageService<T> implements StorageServiceInterface<T> {
   add(value: T): Observable<void> {
     const serializedValue = this.serialize(value);
     localStorage.setItem(this.key, serializedValue);
+    this.subject.next(value);
     return EMPTY;
   }
 
@@ -25,6 +30,7 @@ export class StorageService<T> implements StorageServiceInterface<T> {
 
   remove(): Observable<void> {
     localStorage.removeItem(this.key);
+    this.subject.next(undefined);
     return EMPTY;
   }
 

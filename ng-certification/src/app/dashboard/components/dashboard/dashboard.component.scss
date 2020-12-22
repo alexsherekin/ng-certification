@@ -1,3 +1,16 @@
 :host {
+  .loading {
+    display: none;
+  }
 
+  .is-loading {
+    display: contents;
+    .loading {
+      display: inline;
+    }
+
+    .weather-condition {
+      display: none;
+    }
+  }
 }

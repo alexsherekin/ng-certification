@@ -11,4 +11,5 @@ export abstract class LocationServiceInterface {
   readonly locations$: Observable<LocationData[]>;
   abstract get(): Observable<LocationData[]>;
   abstract add(newLocation: LocationData): Observable<void>;
+  abstract remove(location: LocationData): Observable<void>;
 }

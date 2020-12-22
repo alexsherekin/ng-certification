@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {WeatherConditions} from '../../structures/weather-conditions';
 
 @Component({
@@ -9,6 +9,7 @@ import {WeatherConditions} from '../../structures/weather-conditions';
 })
 export class WeatherConditionsComponent implements OnInit {
   @Input() condition: undefined | WeatherConditions;
+  @Output() close = new EventEmitter<void>();
 
   constructor() { }
 
@@ -17,5 +18,9 @@ export class WeatherConditionsComponent implements OnInit {
 
   getImage(condition: WeatherConditions): string {
     return '';
+  }
+
+  onCloseButtonClicked(): void {
+    this.close.emit();
   }
 }

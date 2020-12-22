@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {BehaviorSubject, Subscription} from 'rxjs';
-import {delay, finalize} from 'rxjs/operators';
+import {finalize} from 'rxjs/operators';
 import {LocationServiceInterface} from '../../services/location/location-service.interface';
 
 @Component({
