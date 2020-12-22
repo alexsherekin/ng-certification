@@ -2,7 +2,7 @@ import {WeatherConditions, WeatherCondition} from '../../structures/weather-cond
 
 export const responseConverter = (response: any, zipCode: string): WeatherConditions => {
   const currentConditions: WeatherCondition =
-    response.clouds !== undefined ? WeatherCondition.clouds :
+    response.weather.id !== 800 ? WeatherCondition.sun :
       WeatherCondition.sun;
   return {
     zipCode,
