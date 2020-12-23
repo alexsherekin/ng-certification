@@ -1,9 +1,9 @@
-import {BehaviorSubject, EMPTY, merge, Observable, of} from 'rxjs';
+import {EMPTY, Observable, of, Subject} from 'rxjs';
 import {StorageServiceInterface} from './storage-service.interface';
 
 export class StorageService<T> implements StorageServiceInterface<T> {
-  private readonly subject = new BehaviorSubject<undefined | T>(undefined);
-  readonly value$ = merge(this.subject, this.get());
+  private readonly subject = new Subject<undefined | T>();
+  readonly value$ = this.subject.asObservable();
 
   constructor(private readonly key: string) {
   }
