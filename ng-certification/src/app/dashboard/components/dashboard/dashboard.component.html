@@ -1,11 +1,20 @@
 <app-add-location></app-add-location>
 
-<div [class.is-loading]="isLoading$ | async">
-  <div class="loading">Loading...</div>
-  <app-weather-conditions
-    *ngFor="let condition of (conditions$ | async); trackBy trackByCondition"
-    [condition]="condition"
-    (remove)="removeLocation(condition.zipCode)"
-    class="weather-condition">
-  </app-weather-conditions>
+<div>
+  <div class="loading" *ngIf="isLoading$ | async">Loading...</div>
+  <div class="error" *ngIf="hasError$ | async">Server error</div>
+  <ng-container *ngIf="conditions$ | async as conditions">
+    <a
+      *ngFor="let condition of conditions; trackBy trackByCondition"
+      [routerLink]="'forecast/' + condition.zipCode"
+      class="link-wrapper"
+    >
+      <app-weather-conditions
+        [condition]="condition"
+        (remove)="removeLocation(condition.zipCode)"
+        class="weather-condition"
+      >
+      </app-weather-conditions>
+    </a>
+  </ng-container>
 </div>

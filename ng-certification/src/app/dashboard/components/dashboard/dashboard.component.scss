@@ -1,17 +1,14 @@
 :host {
   .loading {
-    display: none;
     text-align: center;
   }
 
-  .is-loading {
-    display: contents;
-    .loading {
-      display: block;
-    }
+  .error {
+    text-align: center;
+  }
 
-    .weather-condition {
-      display: none;
-    }
+  .link-wrapper {
+    text-decoration: unset;
+    color: unset;
   }
 }

@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {BehaviorSubject, Observable, of} from 'rxjs';
-import {concatMap, finalize, map, startWith, switchMap, tap, toArray} from 'rxjs/operators';
+import {BehaviorSubject, merge, Observable, of} from 'rxjs';
+import {catchError, concatMap, delay, finalize, map, mergeMap, switchMap, tap, toArray} from 'rxjs/operators';
 import {LocationServiceInterface} from '../../../location/services/location/location-service.interface';
 import {LocationData} from '../../../location/structures/location-data';
 import {WeatherConditions} from '../../../shared/structures/weather-conditions';
@@ -13,39 +13,48 @@ import {WeatherCachingServiceInterface} from '../../../shared/services/weather-c
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardComponent implements OnInit {
+  private hasErrorSubject = new BehaviorSubject<boolean>(false);
   private isLoadingSubject = new BehaviorSubject<boolean>(false);
 
+  hasError$: Observable<boolean> = this.hasErrorSubject.asObservable();
   isLoading$: Observable<boolean> = this.isLoadingSubject.asObservable();
-  readonly conditions$: Observable<WeatherConditions[]> =
-    this.locationService.locations$.pipe(
+  conditions$!: Observable<WeatherConditions[]>;
+
+  constructor(
+    private readonly locationService: LocationServiceInterface,
+    private readonly weatherService: WeatherCachingServiceInterface,
+  ) {
+  }
+
+  ngOnInit(): void {
+    this.conditions$ = merge(
+      this.locationService.get(),
+      this.locationService.locations$
+    ).pipe(
+      tap(() => {
+        this.isLoadingSubject.next(true);
+        this.hasErrorSubject.next(false);
+      }),
       switchMap((locations: undefined | LocationData[]): Observable<WeatherConditions[]> => {
+        console.log(locations);
+
         if (!locations || locations.length <= 0) {
           return of([]);
         }
 
-        this.isLoadingSubject.next(true);
-        this.cd.detectChanges(); // HACK to show the initial loading state
-
         return of(...locations).pipe(
-          concatMap((location: LocationData) => {
-            return this.weatherService.getByZip(location.zip);
-          }),
+          mergeMap((location: LocationData) => this.weatherService.getByZip(location.zip)),
           toArray(),
           map(conditions => conditions.filter(Boolean))
         );
       }),
       tap(() => this.isLoadingSubject.next(false)),
       finalize(() => this.isLoadingSubject.next(false)),
+      catchError(() => {
+        this.hasErrorSubject.next(true);
+        return of([]);
+      }),
     );
-
-  constructor(
-    private readonly locationService: LocationServiceInterface,
-    private readonly weatherService: WeatherCachingServiceInterface,
-    private cd: ChangeDetectorRef,
-  ) {
-  }
-
-  ngOnInit(): void {
   }
 
   trackByCondition = (index: number, condition: WeatherConditions): string => {
