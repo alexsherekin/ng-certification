@@ -1,6 +1,6 @@
 <ng-container *ngIf="condition">
   <span class="label">{{ condition.place }}</span>
-  <button (click)="onCloseButtonClicked()" class="close-button">X</button>
+  <button (click)="onCloseButtonClicked($event)" class="close-button">X</button>
 
   <div class="left-panel">
     <p class="current-condition">

@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Route, Router} from '@angular/router';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {catchError, finalize, map, switchMap, tap} from 'rxjs/operators';
 import {WeatherCachingServiceInterface} from '../../../shared/services/weather-caching/weather-caching-service.interface';
@@ -18,6 +18,7 @@ export class ForecastComponent implements OnInit {
   readonly data$: Observable<WeatherConditions[]>;
 
   constructor(
+    private readonly router: Router,
     private readonly activatedRoute: ActivatedRoute,
     private readonly weatherCachingService: WeatherCachingServiceInterface,
   ) {
@@ -44,6 +45,10 @@ export class ForecastComponent implements OnInit {
 
   getImage(condition: WeatherConditions): string {
     return weatherConditionConverter[condition.current];
+  }
+
+  onBackButtonClicked(): void {
+    this.router.navigateByUrl('/');
   }
 
   trackByCondition = (index: number, condition: WeatherConditions): string => {

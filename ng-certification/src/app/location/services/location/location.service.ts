@@ -1,9 +1,9 @@
-import {Injectable} from "@angular/core";
+import {Injectable} from '@angular/core';
 import {EMPTY, Observable, of} from 'rxjs';
 import {map, switchMap} from 'rxjs/operators';
 import {LocationStorageService} from '../../../shared/services/location-storage/location-storage.service';
 import {LocationData} from '../../structures/location-data';
-import {LocationServiceInterface} from "./location-service.interface";
+import {LocationServiceInterface} from './location-service.interface';
 
 @Injectable()
 export class LocationService implements LocationServiceInterface {

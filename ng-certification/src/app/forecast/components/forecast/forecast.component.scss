@@ -1,34 +1,36 @@
 :host {
-  position: relative;
-  display: flex;
-  flex-direction: column;
+  display: block;
 
-  border: 1px solid black;
-  background-color: white;
+  .box {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    border: 1px solid black;
+    background-color: white;
+    margin: 1rem;
+    padding: 1rem;
 
-  margin: 1rem;
-  padding: 1rem;
+    .label {
+      position: absolute;
+      top: -0.5rem;
+      left: 1rem;
+      background-color: inherit;
+    }
 
-  .label {
-    position: absolute;
-    top: -0.5rem;
-    left: 1rem;
-    background-color: inherit;
+    .row {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .image {
+      text-align: right;
+      width: 50px;
+    }
   }
 
   .loading {
     text-align: center;
-  }
-
-  .row {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .image {
-    text-align: right;
-    width: 50px;
   }
 }

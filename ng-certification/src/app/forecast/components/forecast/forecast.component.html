@@ -1,10 +1,16 @@
-<ng-container *ngIf="isLoading$ | async; else showData">
-  <span class="loading">Loading...</span>
-</ng-container>
-
+<button class="back-button" (click)="onBackButtonClicked()">&lt; Back</button>
+<span
+  *ngIf="isLoading$ | async; else showData"
+  class="loading"
+>
+  Loading...
+</span>
 <ng-template #showData>
   <ng-container *ngIf="data$ | async as data">
-    <ng-container *ngIf="data.length > 0">
+    <div
+      class="box"
+      *ngIf="data.length > 0"
+    >
       <span class="label">{{ data[0].place }} ({{ data[0].zipCode }})</span>
 
       <div
@@ -18,6 +24,6 @@
           [alt]="condition.current"
         >
       </div>
-    </ng-container>
+    </div>
   </ng-container>
 </ng-template>

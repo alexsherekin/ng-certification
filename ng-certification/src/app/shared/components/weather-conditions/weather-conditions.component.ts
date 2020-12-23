@@ -21,7 +21,10 @@ export class WeatherConditionsComponent implements OnInit {
     return weatherConditionConverter[condition.current];
   }
 
-  onCloseButtonClicked(): void {
+  onCloseButtonClicked($event: Event): void {
+    $event.preventDefault();
+    $event.stopPropagation();
+
     this.remove.emit();
   }
 }
