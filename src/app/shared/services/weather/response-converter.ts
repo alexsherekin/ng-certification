@@ -24,7 +24,7 @@ export const getNByZipResponseConverter = (response: any, zipCode: string): Weat
     return {
       date: new Date(1000 * item.dt),
       zipCode,
-      place: item.city.name,
+      place: response.city.name,
       current: toWeatherCondition(item),
       maxTemperature: item.temp.max,
       minTemperature: item.temp.min,
