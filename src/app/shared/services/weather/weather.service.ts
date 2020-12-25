@@ -12,7 +12,7 @@ export const WEATHER_APP_ID_INJECTION_TOKEN = new InjectionToken<string>('WEATHE
   providedIn: 'root'
 })
 export class WeatherService implements WeatherServiceInterface {
-  private readonly HTTP_REQUEST_TIMEOUT = 3000;
+  private readonly HTTP_REQUEST_TIMEOUT = 10000;
   private readonly URL = 'https://api.openweathermap.org';
 
   constructor(
