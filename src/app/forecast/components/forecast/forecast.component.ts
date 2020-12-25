@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Route, Router} from '@angular/router';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {catchError, finalize, map, switchMap, tap} from 'rxjs/operators';
+import {catchError, finalize, map, shareReplay, switchMap, tap} from 'rxjs/operators';
 import {WeatherCachingServiceInterface} from '../../../shared/services/weather-caching/weather-caching-service.interface';
 import {WeatherConditions} from '../../../shared/structures/weather-conditions';
 import weatherConditionConverter from '../../../shared/utils/weather-condition-to-image';
@@ -37,6 +37,7 @@ export class ForecastComponent implements OnInit {
       map(conditions => conditions.filter(Boolean)),
       tap(() => this.isLoadingSubject.next(false)),
       finalize(() => this.isLoadingSubject.next(false)),
+      shareReplay({refCount: true, bufferSize: 1})
     );
   }
 

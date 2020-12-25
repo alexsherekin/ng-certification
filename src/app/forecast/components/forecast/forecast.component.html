@@ -1,29 +1,26 @@
-<button class="back-button" (click)="onBackButtonClicked()">&lt; Back</button>
-<span
-  *ngIf="isLoading$ | async; else showData"
-  class="loading"
->
-  Loading...
-</span>
-<ng-template #showData>
-  <ng-container *ngIf="data$ | async as data">
-    <div
-      class="box"
-      *ngIf="data.length > 0"
-    >
-      <span class="label">{{ data[0].place }} ({{ data[0].zipCode }})</span>
+<button
+  class="back-button"
+  (click)="onBackButtonClicked()"
+>&lt; Back</button>
 
-      <div
-        *ngFor="let condition of data; trackBy trackByCondition"
-        class="row"
+<div *ngIf="isLoading$ | async">Loading...</div>
+<ng-container *ngIf="data$ | async as data">
+  <div
+    class="box"
+    *ngIf="data.length > 0"
+  >
+    <span class="label">{{ data[0].place }} ({{ data[0].zipCode }})</span>
+
+    <div
+      *ngFor="let condition of data; trackBy trackByCondition"
+      class="row"
+    >
+      {{condition | weatherConditionCompact}}
+      <img
+        class="image"
+        [src]="getImage(condition)"
+        [alt]="condition.current"
       >
-        {{condition | weatherConditionCompact}}
-        <img
-          class="image"
-          [src]="getImage(condition)"
-          [alt]="condition.current"
-        >
-      </div>
     </div>
-  </ng-container>
-</ng-template>
+  </div>
+</ng-container>
