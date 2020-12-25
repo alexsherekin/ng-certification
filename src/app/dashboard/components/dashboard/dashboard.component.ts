@@ -1,6 +1,6 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {BehaviorSubject, merge, Observable, of} from 'rxjs';
-import {catchError, concatMap, delay, finalize, map, mergeMap, switchMap, tap, toArray} from 'rxjs/operators';
+import {catchError, concatMap, finalize, map, switchMap, tap, toArray} from 'rxjs/operators';
 import {LocationServiceInterface} from '../../../location/services/location/location-service.interface';
 import {LocationData} from '../../../location/structures/location-data';
 import {WeatherConditions} from '../../../shared/structures/weather-conditions';
@@ -36,14 +36,17 @@ export class DashboardComponent implements OnInit {
         this.hasErrorSubject.next(false);
       }),
       switchMap((locations: undefined | LocationData[]): Observable<WeatherConditions[]> => {
-        console.log(locations);
-
         if (!locations || locations.length <= 0) {
           return of([]);
         }
 
         return of(...locations).pipe(
-          mergeMap((location: LocationData) => this.weatherService.getByZip(location.zip)),
+          concatMap((location: LocationData) =>
+            this.weatherService.getByZip(location.zip)
+              .pipe(
+                catchError(error => of(undefined))
+              )
+          ),
           toArray(),
           map(conditions => conditions.filter(Boolean))
         );
