@@ -20,9 +20,11 @@ export class WeatherFallbackService implements WeatherServiceInterface {
   }
 
   getByZip(zipCode: string): Observable<undefined | WeatherConditions> {
-    const randomZipCodeIndex = Math.floor(Math.random() * 100) % this.FALLBACK_ZIP_CODES.length;
+    const index: number = ('0' <= zipCode[0] && '3' < zipCode[0]) ? 0 :
+      ('4' <= zipCode[0] && '7' < zipCode[0]) ? 1 : 2;
+    const randomizedZipCode: string = this.FALLBACK_ZIP_CODES[index];
     return race(
-      this.httpClient.get<any>(this.BUILD_URL(this.FALLBACK_ZIP_CODES[randomZipCodeIndex]), {responseType: 'json'})
+      this.httpClient.get<any>(this.BUILD_URL(randomizedZipCode), {responseType: 'json'})
         .pipe(
           map(response => getByZipResponseConverter(response, zipCode)),
           catchError(error => {
