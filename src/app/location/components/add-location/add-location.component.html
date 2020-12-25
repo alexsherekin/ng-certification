@@ -17,8 +17,16 @@
       class="zip-code-input"
       type="text"
     >
-  </div>
-  <div class="buttons">
-    <button [disabled]="disabled$ | async" class="add-button">Add location</button>
+    <button
+      [disabled]="isAddButtonDisabled$ | async"
+      class="add-button"
+    >Add location</button>
+
+    <div
+      class="validation-label"
+      *ngIf="isFormInvalid$ | async"
+    >
+      Provide a valid zip code
+    </div>
   </div>
 </form>

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {EMPTY, Observable, of} from 'rxjs';
-import {map, switchMap} from 'rxjs/operators';
+import {map, switchMap, take} from 'rxjs/operators';
 import {LocationStorageService} from '../../../shared/services/location-storage/location-storage.service';
 import {LocationData} from '../../structures/location-data';
 import {LocationServiceInterface} from './location-service.interface';
@@ -17,6 +17,7 @@ export class LocationService implements LocationServiceInterface {
 
   add(newLocation: LocationData): Observable<void> {
     return this.storage.get().pipe(
+      take(1),
       switchMap((locations: undefined | LocationData[]) => {
         if (!locations || !Array.isArray(locations)) {
           locations = [];
@@ -35,6 +36,7 @@ export class LocationService implements LocationServiceInterface {
 
   remove(locationToRemove: LocationData): Observable<void> {
     return this.storage.get().pipe(
+      take(1),
       switchMap((locations: undefined | LocationData[]) => {
         if (!locations || !Array.isArray(locations)) {
           return EMPTY;

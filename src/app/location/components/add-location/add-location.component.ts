@@ -1,7 +1,9 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {BehaviorSubject, Subscription} from 'rxjs';
-import {finalize} from 'rxjs/operators';
+import {BehaviorSubject, combineLatest, Observable, Subscription} from 'rxjs';
+import {distinctUntilChanged, finalize, map, startWith} from 'rxjs/operators';
+import {ZipValidationServiceInterface} from '../../../shared/services/zip-validation/zip-validation-service.interface';
+import {ZipCodeValidatorDirective} from '../../validators/zip-code.validator';
 import {LocationServiceInterface} from '../../services/location/location-service.interface';
 
 @Component({
@@ -17,14 +19,36 @@ export class AddLocationComponent implements OnInit, OnDestroy {
   disabled$ = this.disabledSubject.asObservable();
 
   readonly formGroup: FormGroup;
+  readonly isAddButtonDisabled$: Observable<boolean>;
+  readonly isFormInvalid$: Observable<boolean>;
 
   constructor(
     formBuilder: FormBuilder,
     private readonly locationService: LocationServiceInterface,
+    zipValidationService: ZipValidationServiceInterface,
   ) {
+
     this.formGroup = formBuilder.group({
       zipCode: ''
+    }, {
+      asyncValidators: [new ZipCodeValidatorDirective(zipValidationService)],
+      updateOn: 'change'
     });
+
+    this.isFormInvalid$ = this.formGroup.statusChanges.pipe(
+      map(status => status !== 'VALID' && status !== 'PENDING'),
+      distinctUntilChanged(),
+    );
+
+    this.isAddButtonDisabled$ = combineLatest([
+      this.formGroup.statusChanges.pipe(startWith('')),
+      this.disabled$.pipe(startWith(false)),
+      this.formGroup.controls.zipCode.valueChanges.pipe(startWith(''))
+    ]).pipe(
+      map(([formStatus, isFormDisabled, zipCode]: [string, boolean, string]): boolean =>
+        formStatus !== 'VALID' || isFormDisabled || !zipCode
+      ),
+    );
 
     this.subscriptions.push(
       this.disabled$.subscribe(disabled => {

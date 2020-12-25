@@ -27,13 +27,11 @@
     }
 
     .zip-code-input {
-      width: 100%;
+      width: 30%;
     }
+  }
 
-    .buttons {
-      margin: 5px;
-      flex: 1;
-      align-self: flex-end;
-    }
+  .validation-label {
+    color: red;
   }
 }
